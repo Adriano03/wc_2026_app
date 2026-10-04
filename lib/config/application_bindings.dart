@@ -1,0 +1,44 @@
+import 'package:dio/dio.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
+import 'package:wc_2026_app/config/environment.dart';
+import 'package:wc_2026_app/core/auth/auth_session_notifier.dart';
+import 'package:wc_2026_app/data/repositories/auth/auth_repository.dart';
+import 'package:wc_2026_app/data/repositories/auth/auth_repository_remote.dart';
+import 'package:wc_2026_app/data/repositories/auth_session/auth_session_repository.dart';
+import 'package:wc_2026_app/data/repositories/auth_session/auth_session_repository_local.dart';
+import 'package:wc_2026_app/data/repositories/team/team_repository.dart';
+import 'package:wc_2026_app/data/repositories/team/team_repository_remote.dart';
+import 'package:wc_2026_app/data/services/api/auth_api.dart';
+import 'package:wc_2026_app/data/services/api/team_api.dart';
+import 'package:wc_2026_app/data/services/local/secure_storage_service.dart';
+import 'package:wc_2026_app/domain/use_cases/auth/auth_logout_use_case.dart';
+import 'package:wc_2026_app/domain/use_cases/auth/auth_restore_session_use_case.dart';
+import 'package:wc_2026_app/routing/router.dart';
+
+class const ApplicationBindings({super.key, required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => SecureStorageService()),
+        Provider(create: (context) => Dio(BaseOptions(baseUrl: Environment.baseUrl))),
+        Provider(create: (context) => AuthApi(context.read())),
+        Provider<AuthRepository>(create: (context) => AuthRepositoryRemote(authApi: context.read())),
+        Provider<AuthSessionRepository>(create: (context) => AuthSessionRepositoryLocal(storage: context.read())),
+        Provider(create: (context) => TeamApi(context.read())),
+        Provider<TeamRepository>(create: (context) => TeamRepositoryRemote(teamApi: context.read())),
+        Provider(create: (context) => AuthLogoutUseCase(authSessionRepository: context.read())),
+        Provider(create: (context) => AuthRestoreSessionUseCase(authSessionRepository: context.read())),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) =>
+              AuthSessionNotifier(authLogoutUseCase: context.read(), authRestoreSessionUseCase: context.read()),
+        ),
+        Provider<GoRouter>(create: (context) => router(context.read())),
+      ],
+      child: child,
+    );
+  }
+}
