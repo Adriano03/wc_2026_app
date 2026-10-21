@@ -4,7 +4,7 @@ import 'package:wc_2026_app/ui/core/theme/app_colors.dart';
 import 'package:wc_2026_app/ui/core/theme/app_dimens.dart';
 import 'package:wc_2026_app/ui/core/theme/app_text_styles.dart';
 import 'package:wc_2026_app/ui/core/theme/app_theme.dart';
-import 'package:wc_2026_app/ui/more/widgets/header.dart';
+import 'package:wc_2026_app/ui/more/widgets/header_more.dart';
 import 'package:wc_2026_app/ui/more/widgets/menu_row.dart';
 import 'package:wc_2026_app/ui/more/widgets/menu_section.dart';
 import 'package:wc_2026_app/ui/more/widgets/profile_card.dart';
@@ -13,7 +13,7 @@ class const MoreScreen({super.key, required final AuthSessionNotifier _session})
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Header(),
+      appBar: const HeaderMore(),
       body: ListView(
         padding: .fromLTRB(AppDimens.gridMargin, 16, AppDimens.gridMargin, 24),
         children: [

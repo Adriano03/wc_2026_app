@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wc_2026_app/ui/core/theme/app_colors.dart';
 import 'package:wc_2026_app/ui/core/theme/app_text_styles.dart';
 
-class Header extends StatelessWidget implements PreferredSizeWidget {
+class HeaderMore extends StatelessWidget implements PreferredSizeWidget {
   const new({super.key});
 
   @override
