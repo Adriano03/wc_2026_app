@@ -64,7 +64,12 @@ GoRouter router(AuthSessionNotifier session) => GoRouter(
           routes: [GoRoute(path: Routes.trades, builder: (context, state) => TradesScreen())],
         ),
         StatefulShellBranch(
-          routes: [GoRoute(path: Routes.more, builder: (context, state) => MoreScreen())],
+          routes: [
+            GoRoute(
+              path: Routes.more,
+              builder: (context, state) => MoreScreen(session: context.read()),
+            ),
+          ],
         ),
       ],
     ),
