@@ -4,13 +4,17 @@ import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:wc_2026_app/config/environment.dart';
 import 'package:wc_2026_app/core/auth/auth_session_notifier.dart';
+import 'package:wc_2026_app/data/repositories/album/album_repository.dart';
+import 'package:wc_2026_app/data/repositories/album/album_repository_remote.dart';
 import 'package:wc_2026_app/data/repositories/auth/auth_repository.dart';
 import 'package:wc_2026_app/data/repositories/auth/auth_repository_remote.dart';
 import 'package:wc_2026_app/data/repositories/auth_session/auth_session_repository.dart';
 import 'package:wc_2026_app/data/repositories/auth_session/auth_session_repository_local.dart';
 import 'package:wc_2026_app/data/repositories/team/team_repository.dart';
 import 'package:wc_2026_app/data/repositories/team/team_repository_remote.dart';
+import 'package:wc_2026_app/data/services/api/album_api.dart';
 import 'package:wc_2026_app/data/services/api/auth_api.dart';
+import 'package:wc_2026_app/data/services/api/interceptors/auth_interceptors.dart';
 import 'package:wc_2026_app/data/services/api/team_api.dart';
 import 'package:wc_2026_app/data/services/local/secure_storage_service.dart';
 import 'package:wc_2026_app/domain/use_cases/auth/auth_logout_use_case.dart';
@@ -23,18 +27,37 @@ class const ApplicationBindings({super.key, required final Widget child}) extend
     return MultiProvider(
       providers: [
         Provider(create: (context) => SecureStorageService()),
-        Provider(create: (context) => Dio(BaseOptions(baseUrl: Environment.baseUrl))),
+
+        Provider(
+          create: (context) => AuthInterceptor(storage: context.read()),
+          dispose: (context, interceptor) => interceptor.dispose(),
+        ),
+
+        Provider(
+          create: (context) =>
+              Dio(BaseOptions(baseUrl: Environment.baseUrl))..interceptors.add(context.read<AuthInterceptor>()),
+        ),
+
         Provider(create: (context) => AuthApi(context.read())),
         Provider<AuthRepository>(create: (context) => AuthRepositoryRemote(authApi: context.read())),
         Provider<AuthSessionRepository>(create: (context) => AuthSessionRepositoryLocal(storage: context.read())),
+
         Provider(create: (context) => TeamApi(context.read())),
         Provider<TeamRepository>(create: (context) => TeamRepositoryRemote(teamApi: context.read())),
+
+        Provider(create: (context) => AlbumApi(context.read())),
+        Provider<AlbumRepository>(create: (context) => AlbumRepositoryRemote(albumApi: context.read())),
+
         Provider(create: (context) => AuthLogoutUseCase(authSessionRepository: context.read())),
         Provider(create: (context) => AuthRestoreSessionUseCase(authSessionRepository: context.read())),
+
         ChangeNotifierProvider(
           lazy: false,
-          create: (context) =>
-              AuthSessionNotifier(authLogoutUseCase: context.read(), authRestoreSessionUseCase: context.read()),
+          create: (context) => AuthSessionNotifier(
+            authLogoutUseCase: context.read(),
+            authRestoreSessionUseCase: context.read(),
+            sessionEnded: context.read<AuthInterceptor>().onUnauthorized,
+          ),
         ),
         Provider<GoRouter>(create: (context) => router(context.read())),
       ],

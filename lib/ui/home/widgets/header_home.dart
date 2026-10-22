@@ -4,9 +4,9 @@ import 'package:wc_2026_app/ui/core/theme/app_colors.dart';
 import 'package:wc_2026_app/ui/core/theme/app_dimens.dart';
 import 'package:wc_2026_app/ui/core/theme/app_text_styles.dart';
 
-class HeaderHome extends StatelessWidget implements PreferredSizeWidget {
-  const new({super.key});
-
+class const HeaderHome({super.key, required final String initials, required final String name})
+    extends StatelessWidget
+    implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -16,7 +16,7 @@ class HeaderHome extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: AppDimens.gridMargin,
       title: Row(
         children: [
-          InitialsAvatar(initials: 'RR', size: 44, style: AppTextStyles.button, ringColor: AppColors.ink),
+          InitialsAvatar(initials: initials, size: 44, style: AppTextStyles.button, ringColor: AppColors.ink),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -25,7 +25,7 @@ class HeaderHome extends StatelessWidget implements PreferredSizeWidget {
               spacing: 5,
               children: [
                 Text('OLÁ COLECIONADOR', style: AppTextStyles.overline.copyWith(color: AppColors.grayText)),
-                Text('Adriano Reis', maxLines: 1, overflow: .ellipsis, style: AppTextStyles.title),
+                Text(name, maxLines: 1, overflow: .ellipsis, style: AppTextStyles.title),
               ],
             ),
           ),

@@ -7,6 +7,7 @@ import 'package:wc_2026_app/ui/auth/login/login_bindings.dart';
 import 'package:wc_2026_app/ui/auth/login/login_screen.dart';
 import 'package:wc_2026_app/ui/auth/register/register_bindings.dart';
 import 'package:wc_2026_app/ui/auth/register/register_screen.dart';
+import 'package:wc_2026_app/ui/home/home_bindings.dart';
 import 'package:wc_2026_app/ui/home/home_screen.dart';
 import 'package:wc_2026_app/ui/main/main_screen.dart';
 import 'package:wc_2026_app/ui/more/more_screen.dart';
@@ -53,7 +54,9 @@ GoRouter router(AuthSessionNotifier session) => GoRouter(
           routes: [
             GoRoute(
               path: Routes.home,
-              builder: (context, state) => HomeScreen(name: state.extra as String? ?? ''),
+              builder: (context, state) => HomeBindings(
+                screenBuilder: (context) => HomeScreen(viewModel: context.read(), session: context.read()),
+              ),
             ),
           ],
         ),
