@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wc_2026_app/core/auth/auth_session_notifier.dart';
 import 'package:wc_2026_app/routing/routes.dart';
 import 'package:wc_2026_app/ui/album/album.screen.dart';
+import 'package:wc_2026_app/ui/album/album_bindings.dart';
 import 'package:wc_2026_app/ui/auth/login/login_bindings.dart';
 import 'package:wc_2026_app/ui/auth/login/login_screen.dart';
 import 'package:wc_2026_app/ui/auth/register/register_bindings.dart';
@@ -61,7 +62,13 @@ GoRouter router(AuthSessionNotifier session) => GoRouter(
           ],
         ),
         StatefulShellBranch(
-          routes: [GoRoute(path: Routes.album, builder: (context, state) => AlbumScreen())],
+          routes: [
+            GoRoute(
+              path: Routes.album,
+              builder: (context, state) =>
+                  AlbumBindings(screenBuilder: (context) => AlbumScreen(viewModel: context.read())),
+            ),
+          ],
         ),
         StatefulShellBranch(
           routes: [GoRoute(path: Routes.trades, builder: (context, state) => TradesScreen())],
