@@ -13,6 +13,7 @@ import 'package:wc_2026_app/ui/core/share/error_messages.dart';
 import 'package:wc_2026_app/ui/core/theme/app_colors.dart';
 import 'package:wc_2026_app/ui/core/theme/app_dimens.dart';
 import 'package:wc_2026_app/ui/core/theme/app_theme.dart';
+import 'package:wc_2026_app/ui/sticker/detail/detail_screen.dart';
 
 class const AlbumScreen({super.key, required final AlbumViewModel _viewModel}) extends StatefulWidget {
   @override
@@ -148,7 +149,21 @@ class const _Album({required final AlbumViewModel viewModel, required final Text
                 color: section.color,
                 progress: section.progress,
                 stickers: section.stickers,
-                onStickerTap: (value) {},
+                onStickerTap: (sticker) async {
+                  final DetailArgs arg = (
+                    code: sticker.code,
+                    number: sticker.number,
+                    team: section.name,
+                    country: sticker.label,
+                    teamColor: section.color,
+                    rare: false,
+                    count: sticker.count,
+                  );
+
+                  final changed = await context.push<bool>(Routes.sticker(sticker.code), extra: arg);
+
+                  if (changed ?? false) viewModel.refresh();
+                },
               ),
           ],
         );
