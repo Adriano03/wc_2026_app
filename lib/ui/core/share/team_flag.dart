@@ -13,11 +13,15 @@ class const TeamFlag({
 
   @override
   Widget build(BuildContext context) {
+    if (path == null && code == null) {
+      return const SizedBox.shrink();
+    }
+
     final image = Image.network(
-      path == null ? Environment.flagUrl(code!) : Environment.url(path!),
+      path != null ? Environment.url(path!) : Environment.flagUrl(code!),
       fit: .cover,
-      errorBuilder: (_, _, _) => SizedBox.shrink(),
-      loadingBuilder: (_, child, progress) => progress == null ? child : SizedBox.shrink(),
+      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+      loadingBuilder: (_, child, progress) => progress == null ? child : const SizedBox.shrink(),
     );
 
     return SizedBox(

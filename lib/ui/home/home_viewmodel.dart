@@ -62,7 +62,6 @@ class HomeViewModel({required final AlbumRepository _albumRepository})
 
   Future<Result<void>> _loadRecent() async {
     try {
-      await Future.delayed(Duration(seconds: 2));
       final recentStickers = await _albumRepository.getRecentStickers();
       switch (recentStickers) {
         case Ok<List<RecentSticker>>(:final value):

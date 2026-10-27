@@ -1,5 +1,7 @@
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wc_2026_app/core/auth/auth_session_notifier.dart';
+import 'package:wc_2026_app/routing/routes.dart';
 import 'package:wc_2026_app/ui/core/share/command_builder.dart';
 import 'package:wc_2026_app/ui/core/theme/app_colors.dart';
 import 'package:wc_2026_app/ui/core/theme/app_dimens.dart';
@@ -43,7 +45,12 @@ class const HomeScreen({
                           iconColor: AppColors.white,
                           title: 'ADICIONAR',
                           subTitle: 'figurinha',
-                          onTap: () {},
+                          onTap: () async {
+                            final result = await context.push<bool>(Routes.stickerRegister);
+                            if (result ?? false) {
+                              _viewModel.refresh();
+                            }
+                          },
                         ),
                       ),
                       Expanded(

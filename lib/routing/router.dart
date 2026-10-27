@@ -15,6 +15,8 @@ import 'package:wc_2026_app/ui/more/more_screen.dart';
 import 'package:wc_2026_app/ui/splash/splash_screen.dart';
 import 'package:wc_2026_app/ui/sticker/detail/detail_bindings.dart';
 import 'package:wc_2026_app/ui/sticker/detail/detail_screen.dart';
+import 'package:wc_2026_app/ui/sticker/register/sticker_register_bindings.dart';
+import 'package:wc_2026_app/ui/sticker/register/sticker_register_screen.dart';
 import 'package:wc_2026_app/ui/trades/trades_screen.dart';
 import 'package:wc_2026_app/ui/welcome/welcome_screen.dart';
 
@@ -48,6 +50,12 @@ GoRouter router(AuthSessionNotifier session) => GoRouter(
       path: Routes.authRegister,
       builder: (context, state) =>
           RegisterBindings(screenBuilder: (context) => RegisterScreen(viewModel: context.read())),
+    ),
+
+    GoRoute(
+      path: Routes.stickerRegister,
+      builder: (context, state) =>
+          StickerRegisterBindings(screenBuilder: (context) => StickerRegisterScreen(viewModel: context.read())),
     ),
 
     GoRoute(
